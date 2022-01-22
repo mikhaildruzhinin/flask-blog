@@ -2,7 +2,13 @@ from pathlib import Path
 
 from flask import Flask
 
-from . import db
+from .database import Database
+from .commands import init_db_command
+
+
+def init_app(app: Flask):
+    app.teardown_appcontext(Database.close_db)
+    app.cli.add_command(init_db_command)
 
 
 def create_app(test_config=None):
@@ -23,6 +29,6 @@ def create_app(test_config=None):
     def hello():
         return 'Hello world!'
 
-    db.init_app(app)
+    init_app(app)
 
     return app
