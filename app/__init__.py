@@ -2,6 +2,8 @@ from pathlib import Path
 
 from flask import Flask
 
+from . import db
+
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -20,5 +22,7 @@ def create_app(test_config=None):
     @app.route('/')
     def hello():
         return 'Hello world!'
+
+    db.init_app(app)
 
     return app
