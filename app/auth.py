@@ -38,7 +38,7 @@ def register():
         elif not password:
             error = 'Password is required'
 
-        if error:
+        if not error:
             try:
                 db.execute(
                     'insert into user (username, password) values (?, ?)',
