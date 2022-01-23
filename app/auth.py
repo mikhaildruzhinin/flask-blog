@@ -24,6 +24,7 @@ bp = Blueprint(
     url_prefix='/auth',
 )
 
+
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
@@ -36,7 +37,7 @@ def register():
             error = 'Username is required'
         elif not password:
             error = 'Password is required'
-        
+
         if error:
             try:
                 db.execute(
@@ -60,7 +61,7 @@ def login():
         password = request.form['password']
         db = Database.get_db()
         error = None
-        
+
         user = db.execute(
             'select id, username, password from user where username = ?',
             (username,)
@@ -70,7 +71,7 @@ def login():
             error = 'Incorrect username'
         elif not check_password_hash(user['password'], password):
             error = 'Incorrect password'
-    
+
         if not error:
             session.clear()
             session['user_id'] = user['id']
