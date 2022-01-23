@@ -2,6 +2,7 @@ from pathlib import Path
 
 from flask import Flask
 
+from . import auth
 from .database import Database
 from .commands import init_db_command
 
@@ -9,6 +10,7 @@ from .commands import init_db_command
 def init_app(app: Flask):
     app.teardown_appcontext(Database.close_db)
     app.cli.add_command(init_db_command)
+    app.register_blueprint(auth.bp)
 
 
 def create_app(test_config=None):
@@ -30,5 +32,4 @@ def create_app(test_config=None):
         return 'Hello world!'
 
     init_app(app)
-
     return app
