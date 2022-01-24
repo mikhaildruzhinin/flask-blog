@@ -1,4 +1,5 @@
 import functools
+from sqlite3 import IntegrityError
 
 from flask import (
     Blueprint,
@@ -10,12 +11,9 @@ from flask import (
     session,
     url_for,
 )
-from werkzeug.security import (
-    check_password_hash,
-    generate_password_hash,
-)
+from werkzeug.security import check_password_hash
 
-from app.database import Database
+from app.models import UserModel
 
 
 bp = Blueprint(
@@ -30,7 +28,6 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        db = Database.get_db()
         error = None
 
         if not username:
@@ -40,12 +37,8 @@ def register():
 
         if not error:
             try:
-                db.execute(
-                    'insert into user (username, password) values (?, ?)',
-                    (username, generate_password_hash(password))
-                )
-                db.commit()
-            except db.IntegrityError:
+                UserModel.insert(username, password)
+            except IntegrityError:
                 error = f'User {username} is already registered.'
             else:
                 return redirect(url_for('auth.login'))
@@ -59,13 +52,9 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        db = Database.get_db()
         error = None
 
-        user = db.execute(
-            'select id, username, password from user where username = ?',
-            (username,)
-        ).fetchone()
+        user = UserModel.search_username(username)
 
         if not user:
             error = 'Incorrect username'
@@ -88,10 +77,7 @@ def load_logged_in_user():
     if not user_id:
         g.user = None
     else:
-        g.user = Database.get_db().execute(
-            'select id, username, password from user where id = ?',
-            (user_id,)
-        ).fetchone()
+        g.user = UserModel.search_id(user_id)
 
 
 @bp.route('/logout')
