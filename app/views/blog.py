@@ -10,7 +10,7 @@ from flask import (
 from werkzeug.exceptions import abort
 
 from .auth import login_required
-from .models import PostModel
+from app.models import PostModel
 
 
 bp = Blueprint('blog', __name__)
