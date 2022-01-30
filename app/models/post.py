@@ -10,9 +10,9 @@ class PostModel:
         db = Database.get_db()
 
         select_query = \
-                    '''select p.id, p.title, p.body, p.created, p.author_id, u.username
-                    from {} p join {} u on p.author_id = u.id
-                    order by created desc'''.format(
+            '''select p.id, p.title, p.body, p.created, p.author_id, u.username
+            from {} p join {} u on p.author_id = u.id
+            order by created desc'''.format(
                 cls.__tablename__,
                 UserModel.__tablename__,
             )

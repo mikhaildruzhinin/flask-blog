@@ -59,7 +59,7 @@ def update(post_id):
         title = request.form['title']
         body = request.form['body']
         error = None
-    
+
         if not title:
             error = 'Title is required'
 
@@ -69,6 +69,7 @@ def update(post_id):
             PostModel.update(title, body, post_id)
             return redirect(url_for('blog.index'))
     return render_template('blog/update.html', post=post)
+
 
 @bp.route('/<int:post_id>/delete', methods=('POST',))
 @login_required
