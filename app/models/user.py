@@ -42,7 +42,7 @@ class UserModel:
     @classmethod
     def search_id(
         cls,
-        _id: int,
+        user_id: int,
     ):
         db = Database.get_db()
 
@@ -52,5 +52,5 @@ class UserModel:
             )
         return db.execute(
             select_query,
-            (_id,)
+            (user_id,)
         ).fetchone()

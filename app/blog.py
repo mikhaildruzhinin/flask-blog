@@ -61,7 +61,7 @@ def update(post_id):
         error = None
     
         if not title:
-            error = 'Title is required.'
+            error = 'Title is required'
 
         if error:
             flash(error)
