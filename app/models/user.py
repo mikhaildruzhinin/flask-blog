@@ -1,5 +1,3 @@
-from werkzeug.security import generate_password_hash
-
 from app.database import Database
 
 
@@ -21,8 +19,9 @@ class UserModel:
 
         db.execute(
             insert_query,
-            (username, generate_password_hash(password))
+            (username, password)
         )
+        db.commit()
 
     @classmethod
     def search_username(
@@ -35,7 +34,6 @@ class UserModel:
             'select id, username, password from {} where username = ?'.format(
                 cls.__tablename__
             )
-
         return db.execute(
             select_query,
             (username,)
@@ -52,7 +50,6 @@ class UserModel:
             'select id, username, password from {} where id = ?'.format(
                 cls.__tablename__
             )
-
         return db.execute(
             select_query,
             (_id,)

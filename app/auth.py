@@ -11,7 +11,10 @@ from flask import (
     session,
     url_for,
 )
-from werkzeug.security import check_password_hash
+from werkzeug.security import (
+    check_password_hash,
+    generate_password_hash,
+)
 
 from app.models import UserModel
 
@@ -37,7 +40,7 @@ def register():
 
         if not error:
             try:
-                UserModel.insert(username, password)
+                UserModel.insert(username, generate_password_hash(password))
             except IntegrityError:
                 error = f'User {username} is already registered.'
             else:

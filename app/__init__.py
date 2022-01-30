@@ -1,4 +1,4 @@
-from app.factory import AppFactory
+from .factory import AppFactory
 
 
 def create_app(test_config=None):
@@ -6,4 +6,4 @@ def create_app(test_config=None):
         name=__name__,
         secret_key='dev',
         database='db.sqlite',
-    ).create_app()
+    ).create_app(test_config)

@@ -3,6 +3,7 @@ from pathlib import Path
 from flask import Flask
 
 from .. import auth
+from .. import blog
 from app.database import Database
 from app.commands import init_db_command
 
@@ -25,6 +26,9 @@ class AppFactory:
         app.teardown_appcontext(Database.close_db)
         app.cli.add_command(init_db_command)
         app.register_blueprint(auth.bp)
+        app.register_blueprint(blog.bp)
+        app.add_url_rule('/', endpoint='index')
+        # return app
 
     def create_app(
         self,
@@ -45,10 +49,6 @@ class AppFactory:
             app.config.from_mapping(test_config)
 
         Path.mkdir(Path(app.instance_path), parents=True, exist_ok=True)
-
-        @app.route('/')
-        def hello():
-            return 'Hello world!'
 
         self.init_app(app)
         return app

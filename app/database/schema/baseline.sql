@@ -12,6 +12,6 @@ create table post (
     author_id integer not null,
     created timestamp not null default current_timestamp,
     title text not null,
-    body not null,
+    body text not null,
     foreign key (author_id) references user (id)
 );
